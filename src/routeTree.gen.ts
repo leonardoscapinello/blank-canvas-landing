@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as HighTicketSemCallRouteImport } from './routes/high-ticket-sem-call'
 import { Route as IndexRouteImport } from './routes/index'
 
+const HighTicketSemCallRoute = HighTicketSemCallRouteImport.update({
+  id: '/high-ticket-sem-call',
+  path: '/high-ticket-sem-call',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/high-ticket-sem-call': typeof HighTicketSemCallRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/high-ticket-sem-call': typeof HighTicketSemCallRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/high-ticket-sem-call': typeof HighTicketSemCallRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/high-ticket-sem-call'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/high-ticket-sem-call'
+  id: '__root__' | '/' | '/high-ticket-sem-call'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HighTicketSemCallRoute: typeof HighTicketSemCallRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/high-ticket-sem-call': {
+      id: '/high-ticket-sem-call'
+      path: '/high-ticket-sem-call'
+      fullPath: '/high-ticket-sem-call'
+      preLoaderRoute: typeof HighTicketSemCallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HighTicketSemCallRoute: HighTicketSemCallRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

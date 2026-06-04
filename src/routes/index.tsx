@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import type { CSSProperties } from "react";
 import {
   ArrowRight,
-  BadgeCheck,
   CalendarDays,
   Check,
   ChevronRight,
@@ -16,7 +15,6 @@ import {
   ShieldCheck,
   Sparkles,
   Star,
-  Ticket,
   Video,
   WandSparkles,
 } from "lucide-react";
@@ -225,7 +223,7 @@ function Hero() {
             </p>
             <div className="hero-actions">
               <CtaButton label="Garantir meu ingresso" />
-              <div className="price-glass" aria-label="Preco promocional">
+              <div className="hero-price" aria-label="Preco promocional">
                 <span>de R$147</span>
                 <strong>por R$23</strong>
               </div>
@@ -238,19 +236,12 @@ function Hero() {
                 src="https://v3.vitorviajante.com/wp-content/uploads/2026/06/videoframe_01.webp"
                 alt="Mesa cinematografica com cartas de taro e atmosfera mistica"
               />
-              <div className="floating-card float-one">
-                <Ticket className="h-5 w-5 text-emerald-200" />
-                <span>Entrada liberada por R$23</span>
-              </div>
-              <div className="floating-card float-two">
-                <ShieldCheck className="h-5 w-5 text-yellow-200" />
-                <span>Risco zero por 2 dias</span>
-              </div>
-              <div className="progress-glass">
+              <div className="hero-caption">
                 <div>
-                  <span>Ingressos do Lote 0</span>
-                  <strong>75%</strong>
+                  <ShieldCheck className="h-5 w-5" />
+                  <span>Risco zero por 2 dias</span>
                 </div>
+                <strong>Entrada do Lote 0 por R$23</strong>
                 <div className="progress-track">
                   <span />
                 </div>
@@ -264,30 +255,53 @@ function Hero() {
 }
 
 function ProofStrip() {
+  const proofImages = [
+    "frame1597883336.webp",
+    "frame1597883337.webp",
+    "frame1597883338.webp",
+    "frame1597883339.webp",
+  ];
+
   return (
-    <section className="section-band compact">
+    <section className="proof-showcase">
+      <div className="proof-lightfield" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <div className="proof-grid reveal-up">
-          <div>
+        <div className="proof-stage">
+          <div className="proof-copy reveal-up">
             <span className="eyebrow">Prova social</span>
-            <h2>Elas nao aprenderam significado. Elas aprenderam a aplicar.</h2>
+            <h2>Seguranca aparece quando o metodo entra.</h2>
+            <p>
+              Antes era significado solto. Depois, leitura conduzida, clareza
+              para atender e primeiros resultados financeiros.
+            </p>
+            <div className="proof-result">
+              <strong>R$ 4 mil</strong>
+              <span>em atendimentos apenas de taro, segundo relato de aluna.</span>
+            </div>
           </div>
-          <p>
-            Alunas que ja tinham feito outros cursos finalmente conseguiram ler
-            com seguranca porque trocaram decoreba por estrutura.
-          </p>
-          <div className="proof-images" aria-label="Resultados de alunas">
-            {[
-              "frame1597883336.webp",
-              "frame1597883337.webp",
-              "frame1597883338.webp",
-            ].map((image) => (
+
+          <div className="proof-evidence reveal-up delay-1" aria-label="Resultados de alunas">
+            <div className="proof-featured">
+              <span className="proof-tag">relato em destaque</span>
               <img
-                key={image}
-                src={`https://v3.vitorviajante.com/wp-content/uploads/2026/06/${image}`}
-                alt=""
+                src="https://v3.vitorviajante.com/wp-content/uploads/2026/06/frame1597883336.webp"
+                alt="Depoimento de aluna sobre atendimentos com taro"
               />
-            ))}
+            </div>
+            <div className="proof-ribbon">
+              {proofImages.slice(1).map((image, index) => (
+                <figure key={image} style={{ "--i": index } as CSSProperties}>
+                  <img
+                    src={`https://v3.vitorviajante.com/wp-content/uploads/2026/06/${image}`}
+                    alt="Depoimento de aluna"
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -323,18 +337,23 @@ function AudienceSection() {
 function ProblemSection() {
   return (
     <section className="section-band dark-split">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <div className="section-heading reveal-up">
+      <div className="problem-shell mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="problem-intro reveal-up">
           <span className="eyebrow">O problema</span>
           <h2>O erro nao e falta de talento. E falta de metodo.</h2>
+          <p>
+            Quando o ensino vira decoreba, a leitura trava. O comparativo e
+            simples: a forma como voce aprende define o que acontece na hora de
+            atender.
+          </p>
         </div>
-        <div className="problem-grid">
-          <GlassPanel title="A maioria aprende assim:" items={wrongWay} tone="purple" />
-          <div className="center-vs reveal-up delay-1">
-            <span>VS</span>
+        <div className="problem-compare reveal-up delay-1">
+          <EditorialList eyebrow="Como ensinam" title="A maioria aprende assim" items={wrongWay} tone="purple" />
+          <div className="compare-flow" aria-hidden="true">
+            <span>gera</span>
             <WandSparkles className="h-10 w-10" />
           </div>
-          <GlassPanel title="E o que acontece?" items={consequences} tone="obsidian" />
+          <EditorialList eyebrow="Na pratica" title="E o que acontece" items={consequences} tone="obsidian" />
         </div>
       </div>
     </section>
@@ -386,35 +405,45 @@ function MethodSection() {
 function AgendaSection() {
   return (
     <section className="section-band agenda">
+      <div className="agenda-glow" aria-hidden="true" />
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="section-heading reveal-up">
           <span className="eyebrow">Plano de 2 dias</span>
           <h2>Voce sai da teoria, entra no jogo e aprende a cobrar com consciencia.</h2>
         </div>
-        <div className="agenda-grid">
+        <div className="agenda-scroll">
           {agenda.map((day, index) => (
-            <article className="agenda-card reveal-up" style={{ "--i": index } as CSSProperties} key={day.day}>
-              <span className="day-badge">{day.day}</span>
-              <h3>{day.title}</h3>
-              <ul>
-                {day.items.map((item) => (
-                  <li key={item}>
-                    <ChevronRight className="h-4 w-4" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p>{day.finish}</p>
+            <article className="agenda-card agenda-rise" style={{ "--i": index } as CSSProperties} key={day.day}>
+              <div className="agenda-card-index">0{index + 1}</div>
+              <div className="agenda-card-content">
+                <span className="day-badge">{day.day}</span>
+                <h3>{day.title}</h3>
+                <ul>
+                  {day.items.map((item) => (
+                    <li key={item}>
+                      <ChevronRight className="h-4 w-4" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <p>{day.finish}</p>
+              </div>
             </article>
           ))}
         </div>
-        <div className="time-rail reveal-up">
+        <div className="schedule-block">
+          <div className="schedule-heading">
+            <span className="eyebrow">Cronograma</span>
+            <p>Uma sequencia ao vivo para aprender, pausar, voltar e aplicar.</p>
+          </div>
+          <div className="time-rail">
           {timeline.map(([time, title]) => (
-            <div key={time}>
+            <div className="time-step" key={time}>
               <strong>{time}</strong>
               <span>{title}</span>
             </div>
           ))}
+          </div>
         </div>
         <div className="center-action reveal-up">
           <CtaButton label="Quero dominar o taro em 2 dias" />
@@ -594,22 +623,25 @@ function CtaButton({ label }: { label: string }) {
   );
 }
 
-function GlassPanel({
+function EditorialList({
+  eyebrow,
   title,
   items,
   tone,
 }: {
+  eyebrow: string;
   title: string;
   items: string[];
   tone: "purple" | "obsidian";
 }) {
   return (
-    <article className={`glass-panel reveal-up ${tone}`}>
+    <article className={`editorial-list reveal-up ${tone}`}>
+      <span className="compare-eyebrow">{eyebrow}</span>
       <h3>{title}</h3>
       <ul>
         {items.map((item) => (
           <li key={item}>
-            <BadgeCheck className="h-5 w-5" />
+            <span />
             {item}
           </li>
         ))}
